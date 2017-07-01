@@ -385,7 +385,7 @@ $app->get('/image/{id}.{ext}', function (Request $request, Response $response, $
         return '';
     }
 
-    $post = $this->get('helper')->fetch_first('SELECT * FROM `posts` WHERE `id` = ?', $args['id']);
+    $post = $this->get('helper')->fetch_first('SELECT `ext`, `mime`, `imgdata` FROM `posts` WHERE `id` = ?', $args['id']);
 
     if (($args['ext'] == 'jpg' && $post['mime'] == 'image/jpeg') ||
         ($args['ext'] == 'png' && $post['mime'] == 'image/png') ||
@@ -393,7 +393,7 @@ $app->get('/image/{id}.{ext}', function (Request $request, Response $response, $
         return $response->withHeader('Content-Type', $post['mime'])
                         ->write($post['imgdata']);
     }
-    return $response->withStatus(404)->write('404');
+    return $response->withStatus(200)->write('200');
 });
 
 $app->post('/comment', function (Request $request, Response $response) {
