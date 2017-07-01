@@ -100,7 +100,7 @@ $container['helper'] = function ($c) {
         }
 
         public function try_login($account_name, $password) {
-            $user = $this->fetch_first('SELECT * FROM users WHERE account_name = ? AND del_flg = 0', $account_name);
+            $user = $this->fetch_first('SELECT `account_name`, `passhash` FROM users WHERE account_name = ? AND del_flg = 0', $account_name);
             if ($user !== false && calculate_passhash($user['account_name'], $password) == $user['passhash']) {
                 return $user;
             } elseif ($user) {
@@ -316,7 +316,7 @@ $app->get('/posts', function (Request $request, Response $response) {
 
 $app->get('/posts/{id}', function (Request $request, Response $response, $args) {
     $db = $this->get('db');
-    $ps = $db->prepare('SELECT * FROM `posts` WHERE `id` = ? limit 100');
+    $ps = $db->prepare('SELECT `id`, `user_id` FROM `posts` WHERE `id` = ? limit 100');
     $ps->execute([$args['id']]);
     $results = $ps->fetchAll(PDO::FETCH_ASSOC);
     $posts = $this->get('helper')->make_posts($results, ['all_comments' => true]);
