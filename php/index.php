@@ -170,12 +170,16 @@ function redirect(Response $response, $location, $status) {
 
 function image_url($post) {
     $ext = '';
-    if ($post['mime'] === 'image/jpeg') {
-        $ext = '.jpg';
-    } else if ($post['mime'] === 'image/png') {
-        $ext = '.png';
-    } else if ($post['mime'] === 'image/gif') {
-        $ext = '.gif';
+    switch ($post['mime']) {
+        case 'image/jpeg':
+            $ext = '.jpg';
+            break;
+        case 'image/png':
+            $ext = '.png';
+            break;
+        case 'image/gif':
+            $ext = '.gif';
+            break;
     }
     return "/image/{$post['id']}{$ext}";
 }
